@@ -1,6 +1,7 @@
 'use strict';
 var crypto = require('crypto')
-console.log("process: ", process.env.NODE_ENV)
+require('dotenv').config()
+console.log("process: ", process.env.consumerSecret)
 //mongoose file must be loaded before all other files in order to provide
 // models to other modules
 var mongoose = require('./mongoose'),
@@ -226,6 +227,7 @@ app.get('/gettweets/:user_id/:token/:secret', (req, res) => {
 //token handling middleware
   var authenticate = expressJwt({
     secret: 'my-secret',
+    algorithms: ['HS256'],
     requestProperty: 'auth',
     getToken: function (req) {
       if (req.headers['x-auth-token']) {
