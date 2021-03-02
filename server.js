@@ -1,6 +1,6 @@
 'use strict';
 var crypto = require('crypto')
-
+console.log("process: ", process.env.NODE_ENV)
 //mongoose file must be loaded before all other files in order to provide
 // models to other modules
 var mongoose = require('./mongoose'),
