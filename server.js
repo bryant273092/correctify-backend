@@ -87,7 +87,9 @@ router.route('/auth/twitter/reverse')
 
 
 
-
+  app.get('/hello', (req, res) => {
+    res.send({hello: 'hello'})
+  })
 
 //OAuth Process
 router.route('/auth/twitter')
