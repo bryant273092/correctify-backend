@@ -1,7 +1,6 @@
 'use strict';
 var crypto = require('crypto')
 require('dotenv').config()
-console.log("process: ", process.env.consumerSecret)
 //mongoose file must be loaded before all other files in order to provide
 // models to other modules
 var mongoose = require('./mongoose'),
@@ -12,8 +11,7 @@ var mongoose = require('./mongoose'),
   router = express.Router(),
   cors = require('cors'),
   bodyParser = require('body-parser'),
-  request = require('request'),
-  twitterConfig = require('./twitter.config.js');
+  request = require('request');
   
 mongoose();
 const algo = require('querystring')
@@ -73,8 +71,8 @@ router.route('/auth/twitter/reverse')
       url: 'https://api.twitter.com/oauth/request_token',
       oauth: {
         oauth_callback: "http%3A%2F%2Flocalhost%3A3000%2Ftwitter-callback",
-        consumer_key: twitterConfig.consumerKey,
-        consumer_secret: twitterConfig.consumerSecret
+        consumer_key: process.env.consumerKey,
+        consumer_secret: process.env.consumerSecret
       }
     }, function (err, r, body) {
       if (err) {
@@ -98,8 +96,8 @@ router.route('/auth/twitter')
     request.post({
       url: `https://api.twitter.com/oauth/access_token?oauth_verifier`,
       oauth: {
-        consumer_key: twitterConfig.consumerKey,
-        consumer_secret: twitterConfig.consumerSecret,
+        consumer_key: process.env.consumerKey,
+        consumer_secret: process.env.consumerSecret,
         token: req.query.oauth_token
       },
       form: { oauth_verifier: req.query.oauth_verifier }
@@ -143,17 +141,17 @@ app.get('/getuser/:user_id/:token/:secret', (req, res) => {
   };
   var method = 'GET&'
   var base = 'https://api.twitter.com/1.1/users/show.json' 
-  var initParameters = 'oauth_consumer_key=' + twitterConfig.consumerKey +  "&oauth_nonce=" + 'iVqRssstVdqE5L'+ temp_time
+  var initParameters = 'oauth_consumer_key=' + process.env.consumerKey +  "&oauth_nonce=" + 'iVqRssstVdqE5L'+ temp_time
   var parameters = ''
   for(var key in params){
     parameters += ("&" + key + "=" + params[key])
   }
   var signature_base = method + algo.escape(base) + '&' + algo.escape(initParameters) +algo.escape(parameters)
-  var signing_key = algo.escape(twitterConfig.consumerSecret) + '&' + algo.escape(req.params.secret)
+  var signing_key = algo.escape(process.env.consumerSecret) + '&' + algo.escape(req.params.secret)
   var signedKey = crypto.createHmac('sha1', signing_key).update(signature_base).digest('base64')
   //Create Headers
   var signature = 'oauth_signature="' + algo.escape(signedKey) + '"'
-  var reqHeader = "OAuth " + 'oauth_consumer_key=' + twitterConfig.consumerKey + ',' + 'oauth_nonce="iVqRssstVdqE5L'+ temp_time + '",' + signature
+  var reqHeader = "OAuth " + 'oauth_consumer_key=' + process.env.consumerKey + ',' + 'oauth_nonce="iVqRssstVdqE5L'+ temp_time + '",' + signature
   for(var key in params){
     reqHeader+= ("," + key + '="' + params[key]) + '"'
   }
@@ -191,17 +189,17 @@ app.get('/gettweets/:user_id/:token/:secret', (req, res) => {
   };
   var method = 'GET&'
   var base = 'https://api.twitter.com/1.1/statuses/user_timeline.json' 
-  var initParameters = 'count=200&oauth_consumer_key=' + twitterConfig.consumerKey +  "&oauth_nonce=" + 'iVqRssstVdqE5L'+ temp_time
+  var initParameters = 'count=200&oauth_consumer_key=' + process.env.consumerKey +  "&oauth_nonce=" + 'iVqRssstVdqE5L'+ temp_time
   var parameters = ''
   for(var key in params){
     parameters += ("&" + key + "=" + params[key])
   }
   var signature_base = method + algo.escape(base) + '&' + algo.escape(initParameters) +algo.escape(parameters)
-  var signing_key = algo.escape(twitterConfig.consumerSecret) + '&' + algo.escape(req.params.secret)
+  var signing_key = algo.escape(process.env.consumerSecret) + '&' + algo.escape(req.params.secret)
   var signedKey = crypto.createHmac('sha1', signing_key).update(signature_base).digest('base64')
   //Create Headers
   var signature = 'oauth_signature="' + algo.escape(signedKey) + '"'
-  var reqHeader = "OAuth " + 'count=200,oauth_consumer_key=' + twitterConfig.consumerKey + ',' + 'oauth_nonce="iVqRssstVdqE5L'+ temp_time + '",' + signature
+  var reqHeader = "OAuth " + 'count=200,oauth_consumer_key=' + process.env.consumerKey + ',' + 'oauth_nonce="iVqRssstVdqE5L'+ temp_time + '",' + signature
   for(var key in params){
     reqHeader+= ("," + key + '="' + params[key]) + '"'
   }
