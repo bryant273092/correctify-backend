@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
 
 module.exports = function () {
 
-  var db = mongoose.connect('mongodb+srv://bryant273092:<Myspace-7190>@cluster0.1tyak.mongodb.net/correctify?retryWrites=true&w=majority');
+  var db = mongoose.connect('mongodb+srv://bryant273092:Myspace-7190@cluster0.1tyak.mongodb.net/correctify?retryWrites=true&w=majority');
 
   var UserSchema = new Schema({
     email: {
