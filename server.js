@@ -261,6 +261,6 @@ router.route('/auth/me')
 
 
 app.use('/api/v1', router);
-app.listen(4000);
+app.listen(process.env.PORT || 4000);
 module.exports = app;
 console.log('Server running at http://localhost:4000/');
